@@ -11,7 +11,22 @@
 
 date_default_timezone_set('UTC');
 
-require __DIR__.'/../vendor/autoload.php';
+spl_autoload_register(function ($class) {
+    if (strpos($class, 'Monolog\\') === 0) {
+        $classPath = strtr($class, '\\', DIRECTORY_SEPARATOR) . '.php';
+        $path = __DIR__ . '/../src/' . $classPath;
+        if (file_exists($path)) {
+            require $path;
+        } else {
+            $path = __DIR__ . '/' . $classPath;
+            if (file_exists($path)) {
+                require $path;
+            }
+        }
+    } else if (strpos($class, 'Psr\\') === 0) {
+        require strtr($class, '\\', DIRECTORY_SEPARATOR) . '.php';
+    }
+});
 
 // B.C. for PSR Log's old inheritance
 // see https://github.com/php-fig/log/pull/52
