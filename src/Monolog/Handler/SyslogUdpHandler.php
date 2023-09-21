@@ -78,7 +78,7 @@ class SyslogUdpHandler extends AbstractSyslogHandler
         }
     }
 
-    public function close(): void
+    public function close()
     {
         $this->socket->close();
     }
@@ -141,7 +141,7 @@ class SyslogUdpHandler extends AbstractSyslogHandler
     /**
      * Inject your own socket, mainly used for testing
      */
-    public function setSocket(UdpSocket $socket): self
+    public function setSocket(UdpSocket $socket)
     {
         $this->socket = $socket;
 

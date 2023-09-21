@@ -13,7 +13,7 @@ namespace Monolog\Formatter;
 
 use Monolog\Logger;
 
-class WildfireFormatterTest extends \PHPUnit\Framework\TestCase
+class WildfireFormatterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @covers Monolog\Formatter\WildfireFormatter::format

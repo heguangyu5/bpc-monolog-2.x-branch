@@ -11,11 +11,8 @@
 
 namespace Monolog\Processor;
 
-class PsrLogMessageProcessorTest extends \PHPUnit\Framework\TestCase
+class PsrLogMessageProcessorTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @dataProvider getPairs
-     */
     public function testReplacement($val, $expected)
     {
         $proc = new PsrLogMessageProcessor;
@@ -55,7 +52,7 @@ class PsrLogMessageProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(['foo' => $date], $message['context']);
     }
 
-    public function getPairs()
+    public function dataProviderTestReplacement()
     {
         $date = new \DateTime();
 

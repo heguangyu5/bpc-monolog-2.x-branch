@@ -19,9 +19,6 @@ use Monolog\Logger;
  */
 class TestHandlerTest extends TestCase
 {
-    /**
-     * @dataProvider methodProvider
-     */
     public function testHandler($method, $level)
     {
         $handler = new TestHandler;
@@ -102,7 +99,7 @@ class TestHandlerTest extends TestCase
         ]));
     }
 
-    public function methodProvider()
+    public function dataProviderTestHandler()
     {
         return [
             ['Emergency', Logger::EMERGENCY],

@@ -36,7 +36,7 @@ interface HandlerInterface
      *
      * @phpstan-param array{level: Level} $record
      */
-    public function isHandling(array $record): bool;
+    public function isHandling(array $record);
 
     /**
      * Handles a record.
@@ -54,7 +54,7 @@ interface HandlerInterface
      *
      * @phpstan-param Record $record
      */
-    public function handle(array $record): bool;
+    public function handle(array $record);
 
     /**
      * Handles a set of records at once.
@@ -63,7 +63,7 @@ interface HandlerInterface
      *
      * @phpstan-param Record[] $records
      */
-    public function handleBatch(array $records): void;
+    public function handleBatch(array $records);
 
     /**
      * Closes the handler.
@@ -81,5 +81,5 @@ interface HandlerInterface
      * If you are thinking of calling this method yourself, most likely you should be
      * calling ResettableInterface::reset instead. Have a look.
      */
-    public function close(): void;
+    public function close();
 }

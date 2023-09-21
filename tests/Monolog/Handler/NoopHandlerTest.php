@@ -19,18 +19,22 @@ use Monolog\Logger;
  */
 class NoopHandlerTest extends TestCase
 {
-    /**
-     * @dataProvider logLevelsProvider
-     */
+    public function dataProviderTestIsHandling()
+    {
+        return $this->logLevelsProvider();
+    }
+
     public function testIsHandling($level)
     {
         $handler = new NoopHandler();
         $this->assertTrue($handler->isHandling($this->getRecord($level)));
     }
 
-    /**
-     * @dataProvider logLevelsProvider
-     */
+    public function dataProviderTestHandle()
+    {
+        return $this->logLevelsProvider();
+    }
+
     public function testHandle($level)
     {
         $handler = new NoopHandler();

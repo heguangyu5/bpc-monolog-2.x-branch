@@ -74,7 +74,7 @@ class UdpSocket
         return $this->socket;
     }
 
-    protected function send(string $chunk): void
+    protected function send(string $chunk)
     {
         socket_sendto($this->getSocket(), $chunk, strlen($chunk), $flags = 0, $this->ip, $this->port);
     }

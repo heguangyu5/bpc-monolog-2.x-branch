@@ -118,7 +118,7 @@ class StreamHandlerTest extends TestCase
         $handler->handle($this->getRecord());
     }
 
-    public function invalidArgumentProvider()
+    public function dataProviderTestWriteInvalidArgument()
     {
         return [
             [1],
@@ -128,7 +128,6 @@ class StreamHandlerTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidArgumentProvider
      * @covers Monolog\Handler\StreamHandler::__construct
      */
     public function testWriteInvalidArgument($invalidArgument)
@@ -207,7 +206,6 @@ STRING;
     /**
      * @covers Monolog\Handler\StreamHandler::__construct
      * @covers Monolog\Handler\StreamHandler::write
-     * @dataProvider provideNonExistingAndNotCreatablePath
      */
     public function testWriteNonExistingAndNotCreatablePath($nonExistingAndNotCreatablePath)
     {
@@ -232,7 +230,7 @@ STRING;
         $handler->handle($this->getRecord());
     }
 
-    public function provideNonExistingAndNotCreatablePath()
+    public function dataProviderTestWriteNonExistingAndNotCreatablePath()
     {
         return [
             '/foo/bar/…' => [
@@ -244,7 +242,7 @@ STRING;
         ];
     }
 
-    public function provideMemoryValues()
+    public function dataProviderTestPreventOOMError()
     {
         return [
             ['1M', (int) (1024*1024/10)],
@@ -260,7 +258,6 @@ STRING;
     }
 
     /**
-     * @dataProvider provideMemoryValues
      * @return void
      */
     public function testPreventOOMError($phpMemory, $expectedChunkSize)

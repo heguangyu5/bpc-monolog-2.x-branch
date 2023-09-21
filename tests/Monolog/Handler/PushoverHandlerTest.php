@@ -45,9 +45,8 @@ class PushoverHandlerTest extends TestCase
         return $content;
     }
 
-    /**
-     * @depends testWriteHeader
-     */
+    static $dependsTestWriteContent = 'testWriteHeader';
+
     public function testWriteContent($content)
     {
         $this->assertRegexp('/token=myToken&user=myUser&message=test1&title=Monolog&timestamp=\d{10}$/', $content);

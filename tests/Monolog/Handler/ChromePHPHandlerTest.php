@@ -25,9 +25,6 @@ class ChromePHPHandlerTest extends TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Monolog Test; Chrome/1.0';
     }
 
-    /**
-     * @dataProvider agentsProvider
-     */
     public function testHeaders($agent)
     {
         $_SERVER['HTTP_USER_AGENT'] = $agent;
@@ -52,7 +49,7 @@ class ChromePHPHandlerTest extends TestCase
         $this->assertEquals($expected, $handler->getHeaders());
     }
 
-    public static function agentsProvider()
+    public static function dataProviderTestHeaders()
     {
         return array(
             array('Monolog Test; Chrome/1.0'),

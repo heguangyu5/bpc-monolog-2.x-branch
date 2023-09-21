@@ -57,6 +57,8 @@ class FlowdockHandlerTest extends TestCase
         return $content;
     }
 
+    static $dependsTestWriteContent = 'testWriteHeader';
+
     /**
      * @depends testWriteHeader
      */

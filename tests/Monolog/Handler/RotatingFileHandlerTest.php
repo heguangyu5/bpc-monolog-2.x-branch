@@ -106,9 +106,6 @@ class RotatingFileHandlerTest extends TestCase
         $this->assertEquals('test', file_get_contents($log));
     }
 
-    /**
-     * @dataProvider rotationTests
-     */
     public function testRotation($createFile, $dateFormat, $timeCallback)
     {
         touch($old1 = __DIR__.'/Fixtures/foo-'.date($dateFormat, $timeCallback(-1)).'.rot');
@@ -137,7 +134,7 @@ class RotatingFileHandlerTest extends TestCase
         $this->assertEquals('test', file_get_contents($log));
     }
 
-    public function rotationTests()
+    public function dataProviderTestRotation()
     {
         $now = time();
         $dayCallback = function ($ago) use ($now) {
@@ -176,9 +173,6 @@ class RotatingFileHandlerTest extends TestCase
         return $file;
     }
 
-    /**
-     * @dataProvider rotationWithFolderByDateTests
-     */
     public function testRotationWithFolderByDate($createFile, $dateFormat, $timeCallback)
     {
         $old1 = $this->createDeep(__DIR__.'/Fixtures/'.date($dateFormat, $timeCallback(-1)).'/foo.rot');
@@ -207,7 +201,7 @@ class RotatingFileHandlerTest extends TestCase
         $this->assertEquals('test', file_get_contents($log));
     }
 
-    public function rotationWithFolderByDateTests()
+    public function dataProviderTestRotationWithFolderByDate()
     {
         $now = time();
         $dayCallback = function ($ago) use ($now) {
@@ -238,9 +232,6 @@ class RotatingFileHandlerTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dateFormatProvider
-     */
     public function testAllowOnlyFixedDefinedDateFormats($dateFormat, $valid)
     {
         $handler = new RotatingFileHandler(__DIR__.'/Fixtures/foo.rot', 2);
@@ -252,7 +243,7 @@ class RotatingFileHandlerTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function dateFormatProvider()
+    public function dataProviderTestAllowOnlyFixedDefinedDateFormats()
     {
         return [
             [RotatingFileHandler::FILE_PER_DAY, true],
@@ -279,9 +270,6 @@ class RotatingFileHandlerTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider filenameFormatProvider
-     */
     public function testDisallowFilenameFormatsWithoutDate($filenameFormat, $valid)
     {
         $handler = new RotatingFileHandler(__DIR__.'/Fixtures/foo.rot', 2);
@@ -293,7 +281,7 @@ class RotatingFileHandlerTest extends TestCase
         $handler->setFilenameFormat($filenameFormat, RotatingFileHandler::FILE_PER_DAY);
     }
 
-    public function filenameFormatProvider()
+    public function dataProviderTestDisallowFilenameFormatsWithoutDate()
     {
         return [
             ['{filename}', false],
@@ -307,9 +295,6 @@ class RotatingFileHandlerTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider rotationWhenSimilarFilesExistTests
-     */
     public function testRotationWhenSimilarFileNamesExist($dateFormat)
     {
         touch($old1 = __DIR__.'/Fixtures/foo-foo-'.date($dateFormat).'.rot');
@@ -326,7 +311,7 @@ class RotatingFileHandlerTest extends TestCase
         $this->assertTrue(file_exists($log));
     }
 
-    public function rotationWhenSimilarFilesExistTests()
+    public function dataProviderTestRotationWhenSimilarFileNamesExist()
     {
         return array(
             'Rotation is triggered when the file of the current day is not present but similar exists'

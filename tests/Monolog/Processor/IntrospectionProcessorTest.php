@@ -90,7 +90,7 @@ class IntrospectionProcessorTest extends TestCase
         $expected['extra'] = [
             'file' => null,
             'line' => null,
-            'class' => 'PHPUnit\Framework\TestCase',
+            'class' => 'PHPUnit_Framework_TestCase',
             'function' => 'runTest',
             'callType' => '->',
         ];
@@ -112,7 +112,7 @@ class IntrospectionProcessorTest extends TestCase
         $expected['extra'] = [
             'file' => null,
             'line' => null,
-            'class' => 'PHPUnit\Framework\TestCase',
+            'class' => 'PHPUnit_Framework_TestCase',
             'function' => 'runTest',
             'callType' => '->',
         ];

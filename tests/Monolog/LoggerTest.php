@@ -15,7 +15,7 @@ use Monolog\Handler\HandlerInterface;
 use Monolog\Processor\WebProcessor;
 use Monolog\Handler\TestHandler;
 
-class LoggerTest extends \PHPUnit\Framework\TestCase
+class LoggerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @covers Monolog\Logger::getName
@@ -145,11 +145,18 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
     {
         $logger = new Logger(__METHOD__);
 
-        $handler = $this->prophesize('Monolog\Handler\NullHandler');
-        $handler->handle(\Prophecy\Argument::any())->shouldBeCalled();
-        $handler->isHandling(['level' => 300])->willReturn(true);
+        //$handler = $this->prophesize('Monolog\Handler\NullHandler');
+        //$handler->handle(\Prophecy\Argument::any())->shouldBeCalled();
+        //$handler->isHandling(['level' => 300])->willReturn(true);
 
-        $logger->pushHandler($handler->reveal());
+        $handler = $this->getMockBuilder('Monolog\Handler\NullHandler')->getMock();
+        $handler->expects($this->once())
+                ->method('isHandling')
+                ->with($this->equalTo(['level' => 300]))
+                ->will($this->returnValue(true));
+        $handler->expects($this->once())->method('handle');
+
+        $logger->pushHandler($handler);
 
         $this->assertTrue($logger->addRecord(Logger::WARNING, 'test'));
     }
@@ -161,11 +168,18 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
     {
         $logger = new Logger(__METHOD__);
 
-        $handler = $this->prophesize('Monolog\Handler\NullHandler');
-        $handler->handle()->shouldNotBeCalled();
-        $handler->isHandling(['level' => 300])->willReturn(false);
+        //$handler = $this->prophesize('Monolog\Handler\NullHandler');
+        //$handler->handle()->shouldNotBeCalled();
+        //$handler->isHandling(['level' => 300])->willReturn(false);
 
-        $logger->pushHandler($handler->reveal());
+        $handler = $this->getMockBuilder('Monolog\Handler\NullHandler')->getMock();
+        $handler->expects($this->once())
+                ->method('isHandling')
+                ->with($this->equalTo(['level' => 300]))
+                ->will($this->returnValue(false));
+        $handler->expects($this->never())->method('handle');
+
+        $logger->pushHandler($handler);
 
         $this->assertFalse($logger->addRecord(Logger::WARNING, 'test'));
     }
@@ -495,7 +509,6 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider logMethodProvider
      * @covers Monolog\Logger::debug
      * @covers Monolog\Logger::info
      * @covers Monolog\Logger::notice
@@ -515,7 +528,7 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedLevel, $record['level']);
     }
 
-    public function logMethodProvider()
+    public function dataProviderTestLogMethods()
     {
         return [
             // PSR-3 methods
@@ -531,7 +544,6 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider setTimezoneProvider
      * @covers Monolog\Logger::setTimezone
      */
     public function testSetTimezone($tz)
@@ -545,7 +557,7 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($tz, $record['datetime']->getTimezone());
     }
 
-    public function setTimezoneProvider()
+    public function dataProviderTestSetTimezone()
     {
         return array_map(
             function ($tz) {
@@ -606,7 +618,6 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider useMicrosecondTimestampsProvider
      * @covers Monolog\Logger::useMicrosecondTimestamps
      * @covers Monolog\Logger::addRecord
      */
@@ -626,7 +637,7 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($record['datetime']->format($assertFormat), (string) $record['datetime']);
     }
 
-    public function useMicrosecondTimestampsProvider()
+    public function dataProviderTestUseMicrosecondTimestamps()
     {
         return [
             // this has a very small chance of a false negative (1/10^6)

@@ -16,14 +16,13 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $expected
      * @param object $object
-     * @dataProvider provideObjects
      */
     public function testGetClass($expected, $object)
     {
         $this->assertSame($expected, Utils::getClass($object));
     }
 
-    public function provideObjects()
+    public function dataProviderTestGetClass()
     {
         return [
             ['stdClass', new \stdClass()],
@@ -35,14 +34,13 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $expected
      * @param string $input
-     * @dataProvider providePathsToCanonicalize
      */
     public function testCanonicalizePath($expected, $input)
     {
         $this->assertSame($expected, Utils::canonicalizePath($input));
     }
 
-    public function providePathsToCanonicalize()
+    public function dataProviderTestCanonicalizePath()
     {
         return array(
             array('/foo/bar', '/foo/bar'),
@@ -58,7 +56,6 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
     /**
      * @param int    $code
      * @param string $msg
-     * @dataProvider providesHandleJsonErrorFailure
      */
     public function testHandleJsonErrorFailure($code, $msg)
     {
@@ -66,7 +63,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
         Utils::handleJsonError($code, 'faked');
     }
 
-    public function providesHandleJsonErrorFailure()
+    public function dataProviderTestHandleJsonErrorFailure()
     {
         return [
             'depth' => [JSON_ERROR_DEPTH, 'Maximum stack depth exceeded'],
@@ -80,7 +77,6 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
      * @param mixed $in     Input
      * @param mixed $expect Expected output
      * @covers Monolog\Formatter\NormalizerFormatter::detectAndCleanUtf8
-     * @dataProvider providesDetectAndCleanUtf8
      */
     public function testDetectAndCleanUtf8($in, $expect)
     {
@@ -91,7 +87,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $in);
     }
 
-    public function providesDetectAndCleanUtf8()
+    public function dataProviderTestDetectAndCleanUtf8()
     {
         $obj = new \stdClass;
 
@@ -111,7 +107,6 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider providesPcreLastErrorMessage
      * @param int $code
      * @param string $msg
      */
@@ -128,7 +123,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function providesPcreLastErrorMessage()
+    public function dataProviderTestPcreLastErrorMessage()
     {
         return [
             [0, 'PREG_NO_ERROR'],
@@ -142,7 +137,7 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function provideIniValuesToConvertToBytes()
+    public function dataProviderTestExpandIniShorthandBytes()
     {
         return [
             ['1', 1],
@@ -177,7 +172,6 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider provideIniValuesToConvertToBytes
      * @param mixed $input
      * @param int|false $expected
      */

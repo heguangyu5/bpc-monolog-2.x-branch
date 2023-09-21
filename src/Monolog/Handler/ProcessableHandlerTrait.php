@@ -32,7 +32,7 @@ trait ProcessableHandlerTrait
     /**
      * {@inheritDoc}
      */
-    public function pushProcessor(callable $callback): HandlerInterface
+    public function pushProcessor(callable $callback)
     {
         array_unshift($this->processors, $callback);
 
@@ -42,7 +42,7 @@ trait ProcessableHandlerTrait
     /**
      * {@inheritDoc}
      */
-    public function popProcessor(): callable
+    public function popProcessor()
     {
         if (!$this->processors) {
             throw new \LogicException('You tried to pop from an empty processor stack.');

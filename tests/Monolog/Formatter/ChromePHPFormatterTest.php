@@ -13,7 +13,7 @@ namespace Monolog\Formatter;
 
 use Monolog\Logger;
 
-class ChromePHPFormatterTest extends \PHPUnit\Framework\TestCase
+class ChromePHPFormatterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @covers Monolog\Formatter\ChromePHPFormatter::format

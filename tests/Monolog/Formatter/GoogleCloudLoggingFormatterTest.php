@@ -18,12 +18,10 @@ use function json_decode;
 class GoogleCloudLoggingFormatterTest extends TestCase
 {
     /**
-     * @test
-     *
      * @covers \Monolog\Formatter\JsonFormatter
      * @covers \Monolog\Formatter\GoogleCloudLoggingFormatter::format
      */
-    public function formatProvidesRfc3339Timestamps(): void
+    public function testFormatProvidesRfc3339Timestamps(): void
     {
         $formatter = new GoogleCloudLoggingFormatter();
         $record = $this->getRecord();
@@ -35,12 +33,10 @@ class GoogleCloudLoggingFormatterTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * @covers \Monolog\Formatter\JsonFormatter
      * @covers \Monolog\Formatter\GoogleCloudLoggingFormatter::format
      */
-    public function formatIntroducesLogSeverity(): void
+    public function testFormatIntroducesLogSeverity(): void
     {
         $formatter = new GoogleCloudLoggingFormatter();
         $record = $this->getRecord();

@@ -15,13 +15,12 @@ use DateTimeZone;
 use Monolog\Handler\TestHandler;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Processor\PsrLogMessageProcessor;
-use PHPUnit\Framework\TestCase;
 use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Psr\Log\Test\LoggerInterfaceTest;
 
-class PsrLogCompatTest extends TestCase
+class PsrLogCompatTest extends \PHPUnit_Framework_TestCase
 {
     private $handler;
 
@@ -62,9 +61,6 @@ class PsrLogCompatTest extends TestCase
         $this->assertInstanceOf(LoggerInterface::class, $this->getLogger());
     }
 
-    /**
-     * @dataProvider provideLevelsAndMessages
-     */
     public function testLogsAtAllLevels($level, $message)
     {
         $logger = $this->getLogger();
@@ -78,7 +74,7 @@ class PsrLogCompatTest extends TestCase
         $this->assertEquals($expected, $this->getLogs());
     }
 
-    public function provideLevelsAndMessages()
+    public function dataProviderTestLogsAtAllLevels()
     {
         return array(
             LogLevel::EMERGENCY => array(LogLevel::EMERGENCY, 'message of level emergency with context: {user}'),

@@ -12,9 +12,8 @@
 namespace Monolog\Formatter;
 
 use Monolog\Logger;
-use PHPUnit\Framework\TestCase;
 
-class LogstashFormatterTest extends TestCase
+class LogstashFormatterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @covers Monolog\Formatter\LogstashFormatter::format

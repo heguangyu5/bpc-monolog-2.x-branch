@@ -20,7 +20,7 @@ use Monolog\Formatter\LineFormatter;
  */
 class PsrHandlerTest extends TestCase
 {
-    public function logLevelProvider()
+    public function dataProviderTestHandlesAllLevels()
     {
         $levels = [];
         $monologLogger = new Logger('');
@@ -32,9 +32,6 @@ class PsrHandlerTest extends TestCase
         return $levels;
     }
 
-    /**
-     * @dataProvider logLevelProvider
-     */
     public function testHandlesAllLevels($levelName, $level)
     {
         $message = 'Hello, world! ' . $level;

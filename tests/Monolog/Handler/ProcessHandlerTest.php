@@ -60,7 +60,7 @@ class ProcessHandlerTest extends TestCase
      *
      * @return array
      */
-    public function invalidCommandProvider()
+    public function dataProviderTestConstructWithInvalidCommandThrowsInvalidArgumentException()
     {
         return [
             [1337, 'TypeError'],
@@ -71,7 +71,6 @@ class ProcessHandlerTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidCommandProvider
      * @param mixed $invalidCommand
      * @covers Monolog\Handler\ProcessHandler::guardAgainstInvalidCommand
      */
@@ -86,7 +85,7 @@ class ProcessHandlerTest extends TestCase
      *
      * @return array
      */
-    public function invalidCwdProvider()
+    public function dataProviderTestConstructWithInvalidCwdThrowsInvalidArgumentException()
     {
         return [
             [1337, 'TypeError'],
@@ -96,7 +95,6 @@ class ProcessHandlerTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidCwdProvider
      * @param mixed $invalidCwd
      * @covers Monolog\Handler\ProcessHandler::guardAgainstInvalidCwd
      */

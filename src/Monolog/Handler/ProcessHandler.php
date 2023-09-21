@@ -160,7 +160,7 @@ class ProcessHandler extends AbstractProcessingHandler
      * @codeCoverageIgnore
      * @return string Empty string if there are no errors.
      */
-    protected function readProcessErrors(): string
+    protected function readProcessErrors()
     {
         return (string) stream_get_contents($this->pipes[2]);
     }
@@ -170,7 +170,7 @@ class ProcessHandler extends AbstractProcessingHandler
      *
      * @codeCoverageIgnore
      */
-    protected function writeProcessInput(string $string): void
+    protected function writeProcessInput(string $string)
     {
         fwrite($this->pipes[0], $string);
     }

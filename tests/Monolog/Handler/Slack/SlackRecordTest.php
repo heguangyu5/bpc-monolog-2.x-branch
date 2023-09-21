@@ -19,7 +19,7 @@ use Monolog\Test\TestCase;
  */
 class SlackRecordTest extends TestCase
 {
-    public function dataGetAttachmentColor()
+    public function dataProviderTestGetAttachmentColor()
     {
         return array(
             array(Logger::DEBUG, SlackRecord::COLOR_DEFAULT),
@@ -34,7 +34,6 @@ class SlackRecordTest extends TestCase
     }
 
     /**
-     * @dataProvider dataGetAttachmentColor
      * @param int    $logLevel
      * @param string $expectedColour RGB hex color or name of Slack color
      * @covers ::getAttachmentColor
@@ -69,7 +68,7 @@ class SlackRecordTest extends TestCase
     /**
      * @return array
      */
-    public function dataStringify()
+    public function dataProviderTestStringify()
     {
         $multipleDimensions = array(array(1, 2));
         $numericKeys = array('library' => 'monolog');
@@ -83,9 +82,6 @@ class SlackRecordTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider dataStringify
-     */
     public function testStringify($fields, $expectedResult)
     {
         $slackRecord = new SlackRecord(

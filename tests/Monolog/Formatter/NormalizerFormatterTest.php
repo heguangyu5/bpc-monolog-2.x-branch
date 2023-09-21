@@ -11,12 +11,10 @@
 
 namespace Monolog\Formatter;
 
-use PHPUnit\Framework\TestCase;
-
 /**
  * @covers Monolog\Formatter\NormalizerFormatter
  */
-class NormalizerFormatterTest extends TestCase
+class NormalizerFormatterTest extends \PHPUnit_Framework_TestCase
 {
     public function testFormat()
     {

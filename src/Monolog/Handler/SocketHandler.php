@@ -112,7 +112,7 @@ class SocketHandler extends AbstractProcessingHandler
     /**
      * Close socket, if open
      */
-    public function closeSocket(): void
+    public function closeSocket()
     {
         if (is_resource($this->resource)) {
             fclose($this->resource);

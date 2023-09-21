@@ -76,7 +76,7 @@ class WebProcessor implements ProcessorInterface
     /**
      * {@inheritDoc}
      */
-    public function __invoke(array $record): array
+    public function __invoke(array $record)
     {
         // skip processing if for some reason request data
         // is not present (CLI or wonky SAPIs)

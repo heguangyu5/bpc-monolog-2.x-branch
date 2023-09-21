@@ -82,8 +82,9 @@ class SignalHandlerTest extends TestCase
         $this->assertSame($siginfo, $records[0]['context']);
     }
 
+    static $dependsTestRegisterSignalHandler = 'testHandleSignal';
+
     /**
-     * @depends testHandleSignal
      * @requires extension pcntl
      * @requires extension posix
      * @requires function pcntl_signal
@@ -121,9 +122,9 @@ class SignalHandlerTest extends TestCase
         $this->assertTrue($handler->hasInfoThatContains('SIGURG'));
     }
 
+    static $dependsTestRegisterDefaultPreviousSignalHandler = 'testRegisterSignalHandler';
+
     /**
-     * @dataProvider defaultPreviousProvider
-     * @depends testRegisterSignalHandler
      * @requires function pcntl_fork
      * @requires function pcntl_sigprocmask
      * @requires function pcntl_waitpid
@@ -159,7 +160,7 @@ class SignalHandlerTest extends TestCase
         $this->assertSame($expected, file_get_contents($path));
     }
 
-    public function defaultPreviousProvider()
+    public function dataProviderTestRegisterDefaultPreviousSignalHandler()
     {
         if (!defined('SIGCONT') || !defined('SIGINT') || !defined('SIGURG')) {
             return array();
@@ -173,9 +174,9 @@ class SignalHandlerTest extends TestCase
         );
     }
 
+    static $dependsTestRegisterCallablePreviousSignalHandler = 'testRegisterSignalHandler';
+
     /**
-     * @dataProvider callablePreviousProvider
-     * @depends testRegisterSignalHandler
      * @requires function pcntl_signal_get_handler
      */
     public function testRegisterCallablePreviousSignalHandler($callPrevious)
@@ -196,7 +197,7 @@ class SignalHandlerTest extends TestCase
         $this->assertSame($callPrevious ? 1 : 0, $previousCalled);
     }
 
-    public function callablePreviousProvider()
+    public function dataProviderTestRegisterCallablePreviousSignalHandler()
     {
         return array(
             array(false),
@@ -204,9 +205,9 @@ class SignalHandlerTest extends TestCase
         );
     }
 
+    static $dependsTestRegisterSyscallRestartingSignalHandler = 'testRegisterDefaultPreviousSignalHandler';
+
     /**
-     * @dataProvider restartSyscallsProvider
-     * @depends testRegisterDefaultPreviousSignalHandler
      * @requires function pcntl_fork
      * @requires function pcntl_waitpid
      */
@@ -248,7 +249,7 @@ class SignalHandlerTest extends TestCase
         }
     }
 
-    public function restartSyscallsProvider()
+    public function dataProviderTestRegisterSyscallRestartingSignalHandler()
     {
         return array(
             array(false),
@@ -258,9 +259,9 @@ class SignalHandlerTest extends TestCase
         );
     }
 
+    static $dependsTestRegisterAsyncSignalHandler = 'testRegisterDefaultPreviousSignalHandler';
+
     /**
-     * @dataProvider asyncProvider
-     * @depends testRegisterDefaultPreviousSignalHandler
      * @requires function pcntl_async_signals
      */
     public function testRegisterAsyncSignalHandler($initialAsync, $desiredAsync, $expectedBefore, $expectedAfter)
@@ -277,7 +278,7 @@ class SignalHandlerTest extends TestCase
         $this->assertCount($expectedAfter, $handler->getRecords());
     }
 
-    public function asyncProvider()
+    public function dataProviderTestRegisterAsyncSignalHandler()
     {
         return array(
             array(false, false, 0, 1),

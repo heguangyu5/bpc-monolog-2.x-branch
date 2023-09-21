@@ -42,7 +42,7 @@ class HandlerWrapperTest extends TestCase
     /**
      * @return array
      */
-    public function trueFalseDataProvider()
+    public function dataProviderTestIsHandling()
     {
         return [
             [true],
@@ -52,7 +52,6 @@ class HandlerWrapperTest extends TestCase
 
     /**
      * @param $result
-     * @dataProvider trueFalseDataProvider
      */
     public function testIsHandling($result)
     {
@@ -65,9 +64,16 @@ class HandlerWrapperTest extends TestCase
         $this->assertEquals($result, $this->wrapper->isHandling($record));
     }
 
+    public function dataProviderTestHandle()
+    {
+        return [
+            [true],
+            [false],
+        ];
+    }
+
     /**
      * @param $result
-     * @dataProvider trueFalseDataProvider
      */
     public function testHandle($result)
     {
@@ -80,9 +86,16 @@ class HandlerWrapperTest extends TestCase
         $this->assertEquals($result, $this->wrapper->handle($record));
     }
 
+    public function dataProviderTestHandleBatch()
+    {
+        return [
+            [true],
+            [false],
+        ];
+    }
+
     /**
      * @param $result
-     * @dataProvider trueFalseDataProvider
      */
     public function testHandleBatch($result)
     {

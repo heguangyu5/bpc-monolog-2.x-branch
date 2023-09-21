@@ -52,12 +52,12 @@ abstract class MailHandler extends AbstractProcessingHandler
      *
      * @phpstan-param Record[] $records
      */
-    abstract protected function send(string $content, array $records): void;
+    abstract protected function send(string $content, array $records);
 
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record): void
+    protected function write(array $record)
     {
         $this->send((string) $record['formatted'], [$record]);
     }

@@ -14,7 +14,7 @@ namespace Monolog;
 use Monolog\Handler\TestHandler;
 use Psr\Log\LogLevel;
 
-class ErrorHandlerTest extends \PHPUnit\Framework\TestCase
+class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
 {
     public function testRegister()
     {
@@ -51,7 +51,7 @@ class ErrorHandlerTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function fatalHandlerProvider()
+    public function dataProviderTestFatalHandler()
     {
         return [
             [null, 10, str_repeat(' ', 1024 * 10), LogLevel::ALERT],
@@ -68,9 +68,6 @@ class ErrorHandlerTest extends \PHPUnit\Framework\TestCase
         return $prop->getValue($instance);
     }
 
-    /**
-     * @dataProvider fatalHandlerProvider
-     */
     public function testFatalHandler(
         $level,
         $reservedMemorySize,

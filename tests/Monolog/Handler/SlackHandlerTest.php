@@ -96,9 +96,6 @@ class SlackHandlerTest extends TestCase
         $this->assertRegexp('/icon_emoji=%3Aalien%3A/', $content);
     }
 
-    /**
-     * @dataProvider provideLevelColors
-     */
     public function testWriteContentWithColors($level, $expectedColor)
     {
         $this->createHandler();
@@ -119,7 +116,7 @@ class SlackHandlerTest extends TestCase
         $this->assertRegexp('/text=test1/', $content);
     }
 
-    public function provideLevelColors()
+    public function dataProviderTestWriteContentWithColors()
     {
         return array(
             array(Logger::DEBUG,    urlencode(SlackRecord::COLOR_DEFAULT)),
