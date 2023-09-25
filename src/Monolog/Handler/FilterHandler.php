@@ -145,7 +145,7 @@ class FilterHandler extends Handler implements ProcessableHandlerInterface, Rese
     public function setAcceptedLevels($minLevelOrList = Logger::DEBUG, $maxLevel = Logger::EMERGENCY): self
     {
         if (is_array($minLevelOrList)) {
-            $acceptedLevels = array_map('Monolog\Logger::toMonologLevel', $minLevelOrList);
+            $acceptedLevels = array_map(array('Monolog\Logger', 'toMonologLevel'), $minLevelOrList);
         } else {
             $minLevelOrList = Logger::toMonologLevel($minLevelOrList);
             $maxLevel = Logger::toMonologLevel($maxLevel);

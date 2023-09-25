@@ -200,9 +200,10 @@ class NormalizerFormatterTest extends \PHPUnit_Framework_TestCase
         });
 
         $formatter = new NormalizerFormatter();
-        $reflMethod = new \ReflectionMethod($formatter, 'toJson');
-        $reflMethod->setAccessible(true);
-        $res = $reflMethod->invoke($formatter, [$foo, $bar], true);
+        //$reflMethod = new \ReflectionMethod($formatter, 'toJson');
+        //$reflMethod->setAccessible(true);
+        //$res = $reflMethod->invoke($formatter, [$foo, $bar], true);
+        $res = $formatter->toJsonForTest([$foo, $bar], true);
 
         restore_error_handler();
 
@@ -221,7 +222,7 @@ class NormalizerFormatterTest extends \PHPUnit_Framework_TestCase
     public function testToJsonIgnoresInvalidTypes()
     {
         // set up the invalid data
-        $resource = fopen(__FILE__, 'r');
+        $resource = fopen('/proc/self/comm', 'r');
 
         // set an error handler to assert that the error is not raised anymore
         $that = $this;
@@ -235,9 +236,10 @@ class NormalizerFormatterTest extends \PHPUnit_Framework_TestCase
         });
 
         $formatter = new NormalizerFormatter();
-        $reflMethod = new \ReflectionMethod($formatter, 'toJson');
-        $reflMethod->setAccessible(true);
-        $res = $reflMethod->invoke($formatter, [$resource], true);
+        //$reflMethod = new \ReflectionMethod($formatter, 'toJson');
+        //$reflMethod->setAccessible(true);
+        //$res = $reflMethod->invoke($formatter, [$resource], true);
+        $res = $formatter->toJsonForTest([$resource], true);
 
         restore_error_handler();
 
@@ -283,23 +285,24 @@ class NormalizerFormatterTest extends \PHPUnit_Framework_TestCase
     public function testIgnoresInvalidEncoding()
     {
         $formatter = new NormalizerFormatter();
-        $reflMethod = new \ReflectionMethod($formatter, 'toJson');
-        $reflMethod->setAccessible(true);
+        //$reflMethod = new \ReflectionMethod($formatter, 'toJson');
+        //$reflMethod->setAccessible(true);
 
         // send an invalid unicode sequence as a object that can't be cleaned
         $record = new \stdClass;
         $record->message = "\xB1\x31";
 
-        $this->assertsame('{"message":"�1"}', $reflMethod->invoke($formatter, $record));
+        $this->assertsame('{"message":"�1"}', /*$reflMethod->invoke($formatter, $record)*/ $formatter->toJsonForTest($record));
     }
 
     public function testConvertsInvalidEncodingAsLatin9()
     {
         $formatter = new NormalizerFormatter();
-        $reflMethod = new \ReflectionMethod($formatter, 'toJson');
-        $reflMethod->setAccessible(true);
+        //$reflMethod = new \ReflectionMethod($formatter, 'toJson');
+        //$reflMethod->setAccessible(true);
 
-        $res = $reflMethod->invoke($formatter, ['message' => "\xA4\xA6\xA8\xB4\xB8\xBC\xBD\xBE"]);
+        //$res = $reflMethod->invoke($formatter, ['message' => "\xA4\xA6\xA8\xB4\xB8\xBC\xBD\xBE"]);
+        $res = $formatter->toJsonForTest(['message' => "\xA4\xA6\xA8\xB4\xB8\xBC\xBD\xBE"]);
 
         $this->assertSame('{"message":"��������"}', $res);
     }
@@ -368,7 +371,7 @@ class NormalizerFormatterTest extends \PHPUnit_Framework_TestCase
         $result = $formatter->format($record);
 
         // See https://github.com/php/php-src/issues/8810 fixed in PHP 8.2
-        $offset = PHP_VERSION_ID >= 80200 ? 13 : 11;
+        if (defined('__BPC__')) { $offset = 7; } else { $offset = PHP_VERSION_ID >= 80200 ? 13 : 11; }
         $this->assertSame(
             __FILE__.':'.(__LINE__ - $offset),
             $result['context']['exception']['trace'][0]
@@ -406,9 +409,9 @@ class NormalizerFormatterTest extends \PHPUnit_Framework_TestCase
         $formatter = new NormalizerFormatter();
         $record = array('context' => array('exception' => $e));
         $result = $formatter->format($record);
-
+if (defined('__BPC__')) {$offset = 7;} else {$offset = 9;}
         $this->assertSame(
-            __FILE__ .':'.(__LINE__-9),
+            __FILE__ .':'.(__LINE__-$offset),
             $result['context']['exception']['trace'][0]
         );
     }

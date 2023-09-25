@@ -48,7 +48,12 @@ class IntrospectionProcessorTest extends TestCase
         $tester->test($handler, $this->getRecord());
         list($record) = $handler->getRecords();
         $this->assertEquals(__FILE__, $record['extra']['file']);
-        $this->assertEquals(18, $record['extra']['line']);
+        if (defined('__BPC__')) {
+            $line = 7;
+        } else {
+            $line = 18;
+        }
+        $this->assertEquals($line, $record['extra']['line']);
         $this->assertEquals('Acme\Tester', $record['extra']['class']);
         $this->assertEquals('test', $record['extra']['function']);
     }
@@ -59,9 +64,16 @@ class IntrospectionProcessorTest extends TestCase
         \Acme\tester($handler, $this->getRecord());
         list($record) = $handler->getRecords();
         $this->assertEquals(__FILE__, $record['extra']['file']);
-        $this->assertEquals(24, $record['extra']['line']);
+        if (defined('__BPC__')) {
+            $line = 12;
+            $function = '%d7493a13e131897673ef6634806d5c2a';
+        } else {
+            $line = 24;
+            $function = 'Acme\tester';
+        }
+        $this->assertEquals($line, $record['extra']['line']);
         $this->assertEquals(null, $record['extra']['class']);
-        $this->assertEquals('Acme\tester', $record['extra']['function']);
+        $this->assertEquals($function, $record['extra']['function']);
     }
 
     public function testLevelTooLow()

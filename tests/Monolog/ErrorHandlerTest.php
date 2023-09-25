@@ -31,9 +31,9 @@ class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
         $phpunitHandler = set_error_handler($prevHandler = function () {
         });
 
-        try {
+        //try {
             $errHandler->registerErrorHandler([], true);
-            $prop = $this->getPrivatePropertyValue($errHandler, 'previousErrorHandler');
+            $prop = $errHandler->getPrivatePropertyValue('previousErrorHandler');
             $this->assertTrue(is_callable($prop));
             $this->assertSame($prevHandler, $prop);
 
@@ -45,10 +45,10 @@ class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
             trigger_error('Foo', E_USER_NOTICE);
             $this->assertCount(2, $handler->getRecords());
             $this->assertTrue($handler->hasEmergencyRecords());
-        } finally {
+        //} finally {
             // restore previous handler
             set_error_handler($phpunitHandler);
-        }
+        //}
     }
 
     public function dataProviderTestFatalHandler()
@@ -58,7 +58,7 @@ class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
             [LogLevel::DEBUG, 15, str_repeat(' ', 1024 * 15), LogLevel::DEBUG],
         ];
     }
-
+/*
     protected function getPrivatePropertyValue($instance, $property)
     {
         $ref = new \ReflectionClass(get_class($instance));
@@ -67,7 +67,7 @@ class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
 
         return $prop->getValue($instance);
     }
-
+*/
     public function testFatalHandler(
         $level,
         $reservedMemorySize,
@@ -79,9 +79,9 @@ class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
         $res = $errHandler->registerFatalHandler($level, $reservedMemorySize);
 
         $this->assertSame($res, $errHandler);
-        $this->assertTrue($this->getPrivatePropertyValue($errHandler, 'hasFatalErrorHandler'));
-        $this->assertEquals($expectedReservedMemory, $this->getPrivatePropertyValue($errHandler, 'reservedMemory'));
-        $this->assertEquals($expectedFatalLevel, $this->getPrivatePropertyValue($errHandler, 'fatalLevel'));
+        $this->assertTrue($errHandler->getPrivatePropertyValue('hasFatalErrorHandler'));
+        $this->assertEquals($expectedReservedMemory, $errHandler->getPrivatePropertyValue('reservedMemory'));
+        $this->assertEquals($expectedFatalLevel, $errHandler->getPrivatePropertyValue('fatalLevel'));
     }
 
     public function testHandleException()
@@ -93,37 +93,37 @@ class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($errHandler, $resHandler);
 
         $map['ParseError'] = LogLevel::CRITICAL;
-        $prop = $this->getPrivatePropertyValue($errHandler, 'uncaughtExceptionLevelMap');
+        $prop = $errHandler->getPrivatePropertyValue('uncaughtExceptionLevelMap');
         $this->assertSame($map, $prop);
 
         $errHandler->registerExceptionHandler([], true);
-        $prop = $this->getPrivatePropertyValue($errHandler, 'previousExceptionHandler');
+        $prop = $errHandler->getPrivatePropertyValue('previousExceptionHandler');
         $this->assertTrue(is_callable($prop));
     }
 
     public function testCodeToString()
     {
-        $method = new \ReflectionMethod(ErrorHandler::class, 'codeToString');
-        $method->setAccessible(true);
+        //$method = new \ReflectionMethod(ErrorHandler::class, 'codeToString');
+        //$method->setAccessible(true);
 
-        $this->assertEquals('E_ERROR', $method->invokeArgs(null, [E_ERROR]));
-        $this->assertEquals('E_WARNING', $method->invokeArgs(null, [E_WARNING]));
-        $this->assertEquals('E_PARSE', $method->invokeArgs(null, [E_PARSE]));
-        $this->assertEquals('E_NOTICE', $method->invokeArgs(null, [E_NOTICE]));
-        $this->assertEquals('E_CORE_ERROR', $method->invokeArgs(null, [E_CORE_ERROR]));
-        $this->assertEquals('E_CORE_WARNING', $method->invokeArgs(null, [E_CORE_WARNING]));
-        $this->assertEquals('E_COMPILE_ERROR', $method->invokeArgs(null, [E_COMPILE_ERROR]));
-        $this->assertEquals('E_COMPILE_WARNING', $method->invokeArgs(null, [E_COMPILE_WARNING]));
-        $this->assertEquals('E_USER_ERROR', $method->invokeArgs(null, [E_USER_ERROR]));
-        $this->assertEquals('E_USER_WARNING', $method->invokeArgs(null, [E_USER_WARNING]));
-        $this->assertEquals('E_USER_NOTICE', $method->invokeArgs(null, [E_USER_NOTICE]));
-        $this->assertEquals('E_STRICT', $method->invokeArgs(null, [E_STRICT]));
-        $this->assertEquals('E_RECOVERABLE_ERROR', $method->invokeArgs(null, [E_RECOVERABLE_ERROR]));
-        $this->assertEquals('E_DEPRECATED', $method->invokeArgs(null, [E_DEPRECATED]));
-        $this->assertEquals('E_USER_DEPRECATED', $method->invokeArgs(null, [E_USER_DEPRECATED]));
+        $this->assertEquals('E_ERROR', ErrorHandler::codeToStringForTest(E_ERROR));
+        $this->assertEquals('E_WARNING', ErrorHandler::codeToStringForTest(E_WARNING));
+        $this->assertEquals('E_PARSE', ErrorHandler::codeToStringForTest(E_PARSE));
+        $this->assertEquals('E_NOTICE', ErrorHandler::codeToStringForTest(E_NOTICE));
+        $this->assertEquals('E_CORE_ERROR', ErrorHandler::codeToStringForTest(E_CORE_ERROR));
+        $this->assertEquals('E_CORE_WARNING', ErrorHandler::codeToStringForTest(E_CORE_WARNING));
+        $this->assertEquals('E_COMPILE_ERROR', ErrorHandler::codeToStringForTest(E_COMPILE_ERROR));
+        $this->assertEquals('E_COMPILE_WARNING', ErrorHandler::codeToStringForTest(E_COMPILE_WARNING));
+        $this->assertEquals('E_USER_ERROR', ErrorHandler::codeToStringForTest(E_USER_ERROR));
+        $this->assertEquals('E_USER_WARNING', ErrorHandler::codeToStringForTest(E_USER_WARNING));
+        $this->assertEquals('E_USER_NOTICE', ErrorHandler::codeToStringForTest(E_USER_NOTICE));
+        $this->assertEquals('E_STRICT', ErrorHandler::codeToStringForTest(E_STRICT));
+        $this->assertEquals('E_RECOVERABLE_ERROR', ErrorHandler::codeToStringForTest(E_RECOVERABLE_ERROR));
+        $this->assertEquals('E_DEPRECATED', ErrorHandler::codeToStringForTest(E_DEPRECATED));
+        $this->assertEquals('E_USER_DEPRECATED', ErrorHandler::codeToStringForTest(E_USER_DEPRECATED));
 
-        $this->assertEquals('Unknown PHP error', $method->invokeArgs(null, ['RANDOM_TEXT']));
-        $this->assertEquals('Unknown PHP error', $method->invokeArgs(null, [E_ALL]));
+        $this->assertEquals('Unknown PHP error', ErrorHandler::codeToStringForTest('RANDOM_TEXT'));
+        $this->assertEquals('Unknown PHP error', ErrorHandler::codeToStringForTest(E_ALL));
     }
 }
 

@@ -73,9 +73,10 @@ class LogmaticHandlerTest extends TestCase
             ->onlyMethods(['fsockopen', 'streamSetTimeout', 'closeSocket'])
             ->getMock();
 
-        $reflectionProperty = new \ReflectionProperty('Monolog\Handler\SocketHandler', 'connectionString');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->handler, 'localhost:1234');
+        //$reflectionProperty = new \ReflectionProperty('Monolog\Handler\SocketHandler', 'connectionString');
+        //$reflectionProperty->setAccessible(true);
+        //$reflectionProperty->setValue($this->handler, 'localhost:1234');
+        $this->handler->setConnectionString('localhost:1234');
 
         $this->handler->expects($this->any())
             ->method('fsockopen')

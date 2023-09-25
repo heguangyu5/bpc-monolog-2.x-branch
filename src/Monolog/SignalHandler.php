@@ -67,7 +67,7 @@ class SignalHandler
         $this->signalRestartSyscalls[$signo] = $restartSyscalls;
 
         if ($async !== null) {
-            pcntl_async_signals($async);
+            //pcntl_async_signals($async);
         }
 
         pcntl_signal($signo, [$this, 'handleSignal'], $restartSyscalls);

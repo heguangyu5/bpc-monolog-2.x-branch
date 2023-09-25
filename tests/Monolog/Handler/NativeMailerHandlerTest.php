@@ -14,10 +14,9 @@ namespace Monolog\Handler;
 use Monolog\Test\TestCase;
 use Monolog\Logger;
 
-function mail($to, $subject, $message, $additional_headers = null, $additional_parameters = null)
-{
+NativeMailerHandler::$mailFunc = function ($to, $subject, $message, $additional_headers = null, $additional_parameters = null) {
     $GLOBALS['mail'][] = func_get_args();
-}
+};
 
 class NativeMailerHandlerTest extends TestCase
 {

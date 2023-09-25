@@ -738,19 +738,21 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $uid2 = $processorUid2->getUid();
         $logger->pushProcessor($processorUid2);
 
-        $getProperty = function ($object, $property) {
+        /*$getProperty = function ($object, $property) {
             $reflectionProperty = new \ReflectionProperty(get_class($object), $property);
             $reflectionProperty->setAccessible(true);
 
             return $reflectionProperty->getValue($object);
-        };
+        };*/
         $that = $this;
-        $assertBufferOfBufferHandlerEmpty = function () use ($getProperty, $bufferHandler, $that) {
-            $that->assertEmpty($getProperty($bufferHandler, 'buffer'));
+        $assertBufferOfBufferHandlerEmpty = function () use (/*$getProperty, */$bufferHandler, $that) {
+            //$that->assertEmpty($getProperty($bufferHandler, 'buffer'));
+            $that->assertEmpty($bufferHandler->getBuffer());
         };
-        $assertBuffersEmpty = function () use ($assertBufferOfBufferHandlerEmpty, $getProperty, $fingersCrossedHandler, $that) {
+        $assertBuffersEmpty = function () use ($assertBufferOfBufferHandlerEmpty, /*$getProperty, */$fingersCrossedHandler, $that) {
             $assertBufferOfBufferHandlerEmpty();
-            $that->assertEmpty($getProperty($fingersCrossedHandler, 'buffer'));
+            //$that->assertEmpty($getProperty($fingersCrossedHandler, 'buffer'));
+            $that->assertEmpty($fingersCrossedHandler->getBuffer());
         };
 
         $logger->debug('debug1');
@@ -758,8 +760,12 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $assertBuffersEmpty();
         $this->assertFalse($testHandler->hasDebugRecords());
         $this->assertFalse($testHandler->hasErrorRecords());
-        $this->assertNotSame($uid1, $uid1 = $processorUid1->getUid());
-        $this->assertNotSame($uid2, $uid2 = $processorUid2->getUid());
+        $newUid1 = $processorUid1->getUid();
+        $newUid2 = $processorUid2->getUid();
+        $this->assertNotSame($uid1, $newUid1);
+        $this->assertNotSame($uid2, $newUid2);
+        $uid1 = $newUid1;
+        $uid2 = $newUid2;
 
         $logger->debug('debug2');
         $logger->error('error2');
@@ -767,19 +773,28 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $assertBuffersEmpty();
         $this->assertTrue($testHandler->hasRecordThatContains('debug2', Logger::DEBUG));
         $this->assertTrue($testHandler->hasRecordThatContains('error2', Logger::ERROR));
-        $this->assertNotSame($uid1, $uid1 = $processorUid1->getUid());
-        $this->assertNotSame($uid2, $uid2 = $processorUid2->getUid());
+        $newUid1 = $processorUid1->getUid();
+        $newUid2 = $processorUid2->getUid();
+        $this->assertNotSame($uid1, $newUid1);
+        $this->assertNotSame($uid2, $newUid2);
+        $uid1 = $newUid1;
+        $uid2 = $newUid2;
 
         $logger->info('info3');
-        $this->assertNotEmpty($getProperty($fingersCrossedHandler, 'buffer'));
+        //$this->assertNotEmpty($getProperty($fingersCrossedHandler, 'buffer'));
+        $this->assertNotEmpty($fingersCrossedHandler->getBuffer());
         $assertBufferOfBufferHandlerEmpty();
         $this->assertFalse($testHandler->hasInfoRecords());
 
         $logger->reset();
         $assertBuffersEmpty();
         $this->assertFalse($testHandler->hasInfoRecords());
-        $this->assertNotSame($uid1, $uid1 = $processorUid1->getUid());
-        $this->assertNotSame($uid2, $uid2 = $processorUid2->getUid());
+        $newUid1 = $processorUid1->getUid();
+        $newUid2 = $processorUid2->getUid();
+        $this->assertNotSame($uid1, $newUid1);
+        $this->assertNotSame($uid2, $newUid2);
+        $uid1 = $newUid1;
+        $uid2 = $newUid2;
 
         $logger->notice('notice4');
         $logger->emergency('emergency4');
@@ -788,8 +803,10 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($testHandler->hasInfoRecords());
         $this->assertTrue($testHandler->hasRecordThatContains('notice4', Logger::NOTICE));
         $this->assertTrue($testHandler->hasRecordThatContains('emergency4', Logger::EMERGENCY));
-        $this->assertNotSame($uid1, $processorUid1->getUid());
-        $this->assertNotSame($uid2, $processorUid2->getUid());
+        $newUid1 = $processorUid1->getUid();
+        $newUid2 = $processorUid2->getUid();
+        $this->assertNotSame($uid1, $newUid1);
+        $this->assertNotSame($uid2, $newUid2);
     }
 
     /**
@@ -848,7 +865,7 @@ class LoggingHandler implements HandlerInterface
     }
 }
 
-
+/*
 class FiberSuspendHandler implements HandlerInterface
 {
     public function isHandling(array $record): bool
@@ -870,4 +887,4 @@ class FiberSuspendHandler implements HandlerInterface
     public function close(): void
     {
     }
-}
+}*/

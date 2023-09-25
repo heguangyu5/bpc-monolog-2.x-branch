@@ -26,10 +26,12 @@ class BrowserConsoleHandlerTest extends TestCase
 
     protected function generateScript()
     {
-        $reflMethod = new \ReflectionMethod('Monolog\Handler\BrowserConsoleHandler', 'generateScript');
-        $reflMethod->setAccessible(true);
+        //$reflMethod = new \ReflectionMethod('Monolog\Handler\BrowserConsoleHandler', 'generateScript');
+        //$reflMethod->setAccessible(true);
 
-        return $reflMethod->invoke(null);
+        //return $reflMethod->invoke(null);
+
+        return BrowserConsoleHandler::generateScriptForTest();
     }
 
     public function testStyling()

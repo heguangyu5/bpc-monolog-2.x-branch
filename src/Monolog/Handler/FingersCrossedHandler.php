@@ -299,4 +299,10 @@ class FingersCrossedHandler extends Handler implements ProcessableHandlerInterfa
 
         throw new \UnexpectedValueException('The nested handler of type '.get_class($handler).' does not support formatters.');
     }
+
+    // for test only
+    public function getBuffer()
+    {
+        return $this->buffer;
+    }
 }

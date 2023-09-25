@@ -257,6 +257,12 @@ class NormalizerFormatter implements FormatterInterface
         return Utils::jsonEncode($data, $this->jsonEncodeOptions, $ignoreErrors);
     }
 
+    // for test only
+    public function toJsonForTest($data, bool $ignoreErrors = false)
+    {
+        return $this->toJson($data, $ignoreErrors);
+    }
+
     /**
      * @return string
      */

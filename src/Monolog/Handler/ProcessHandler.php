@@ -188,4 +188,10 @@ class ProcessHandler extends AbstractProcessingHandler
             $this->process = null;
         }
     }
+
+    // for test only
+    public function getProcess()
+    {
+        return $this->process;
+    }
 }

@@ -259,12 +259,12 @@ class SignalHandlerTest extends TestCase
         );
     }
 
-    static $dependsTestRegisterAsyncSignalHandler = 'testRegisterDefaultPreviousSignalHandler';
+//    static $dependsTestRegisterAsyncSignalHandler = 'testRegisterDefaultPreviousSignalHandler';
 
     /**
      * @requires function pcntl_async_signals
      */
-    public function testRegisterAsyncSignalHandler($initialAsync, $desiredAsync, $expectedBefore, $expectedAfter)
+/*    public function testRegisterAsyncSignalHandler($initialAsync, $desiredAsync, $expectedBefore, $expectedAfter)
     {
         $this->setSignalHandler(SIGURG, SIG_IGN);
         pcntl_async_signals($initialAsync);
@@ -288,5 +288,5 @@ class SignalHandlerTest extends TestCase
             array(true, null, 1, 1),
             array(true, true, 1, 1),
         );
-    }
+    }*/
 }

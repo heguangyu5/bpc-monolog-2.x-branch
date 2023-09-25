@@ -304,4 +304,16 @@ class ErrorHandler
 
         return 'Unknown PHP error';
     }
+
+    // for test only
+    public function getPrivatePropertyValue($property)
+    {
+        return $this->$property;
+    }
+
+    // for test only
+    public static function codeToStringForTest($code)
+    {
+        return self::codeToString($code);
+    }
 }

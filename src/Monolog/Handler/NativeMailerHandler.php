@@ -111,6 +111,7 @@ class NativeMailerHandler extends MailHandler
     /**
      * {@inheritDoc}
      */
+    public static $mailFunc = 'mail';
     protected function send(string $content, array $records): void
     {
         $contentType = $this->getContentType() ?: ($this->isHtmlBody($content) ? 'text/html' : 'text/plain');
@@ -132,8 +133,9 @@ class NativeMailerHandler extends MailHandler
         }
 
         $parameters = implode(' ', $this->parameters);
+        $mailFunc = self::$mailFunc;
         foreach ($this->to as $to) {
-            mail($to, $subject, $content, $headers, $parameters);
+            $mailFunc($to, $subject, $content, $headers, $parameters);
         }
     }
 

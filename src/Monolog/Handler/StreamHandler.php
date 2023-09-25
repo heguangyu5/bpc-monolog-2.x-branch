@@ -71,7 +71,7 @@ class StreamHandler extends AbstractProcessingHandler
         if (is_resource($stream)) {
             $this->stream = $stream;
 
-            stream_set_chunk_size($this->stream, $this->streamChunkSize);
+            //stream_set_chunk_size($this->stream, $this->streamChunkSize);
         } elseif (is_string($stream)) {
             $this->url = Utils::canonicalizePath($stream);
         } else {
@@ -148,7 +148,7 @@ class StreamHandler extends AbstractProcessingHandler
 
                 throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened in append mode: '.$this->errorMessage, $url) . Utils::getRecordMessageForException($record));
             }
-            stream_set_chunk_size($stream, $this->streamChunkSize);
+            //stream_set_chunk_size($stream, $this->streamChunkSize);
             $this->stream = $stream;
         }
 

@@ -21,9 +21,15 @@ class RotatingFileHandlerTest extends TestCase
 {
     private $lastError;
 
+    protected static $baseDir;
+
     public function setUp(): void
     {
-        $dir = __DIR__.'/Fixtures';
+        if (!self::$baseDir) {
+            self::$baseDir = getcwd() . '/Monolog/Handler';
+        }
+
+        $dir = self::$baseDir.'/Fixtures';
         chmod($dir, 0777);
         if (!is_writable($dir)) {
             $this->markTestSkipped($dir.' must be writable to test the RotatingFileHandler.');
@@ -43,12 +49,12 @@ class RotatingFileHandlerTest extends TestCase
     {
         parent::tearDown();
 
-        foreach (glob(__DIR__.'/Fixtures/*.rot') as $file) {
+        foreach (glob(self::$baseDir.'/Fixtures/*.rot') as $file) {
             unlink($file);
         }
 
         if ('testRotationWithFolderByDate' === $this->getName(false)) {
-            foreach (glob(__DIR__.'/Fixtures/[0-9]*') as $folder) {
+            foreach (glob(self::$baseDir.'/Fixtures/[0-9]*') as $folder) {
                 $this->rrmdir($folder);
             }
         }
@@ -95,31 +101,31 @@ class RotatingFileHandlerTest extends TestCase
 
     public function testRotationCreatesNewFile()
     {
-        touch(__DIR__.'/Fixtures/foo-'.date('Y-m-d', time() - 86400).'.rot');
+        touch(self::$baseDir.'/Fixtures/foo-'.date('Y-m-d', time() - 86400).'.rot');
 
-        $handler = new RotatingFileHandler(__DIR__.'/Fixtures/foo.rot');
+        $handler = new RotatingFileHandler(self::$baseDir.'/Fixtures/foo.rot');
         $handler->setFormatter($this->getIdentityFormatter());
         $handler->handle($this->getRecord());
 
-        $log = __DIR__.'/Fixtures/foo-'.date('Y-m-d').'.rot';
+        $log = self::$baseDir.'/Fixtures/foo-'.date('Y-m-d').'.rot';
         $this->assertTrue(file_exists($log));
         $this->assertEquals('test', file_get_contents($log));
     }
 
     public function testRotation($createFile, $dateFormat, $timeCallback)
     {
-        touch($old1 = __DIR__.'/Fixtures/foo-'.date($dateFormat, $timeCallback(-1)).'.rot');
-        touch($old2 = __DIR__.'/Fixtures/foo-'.date($dateFormat, $timeCallback(-2)).'.rot');
-        touch($old3 = __DIR__.'/Fixtures/foo-'.date($dateFormat, $timeCallback(-3)).'.rot');
-        touch($old4 = __DIR__.'/Fixtures/foo-'.date($dateFormat, $timeCallback(-4)).'.rot');
+        touch($old1 = self::$baseDir.'/Fixtures/foo-'.date($dateFormat, $timeCallback(-1)).'.rot');
+        touch($old2 = self::$baseDir.'/Fixtures/foo-'.date($dateFormat, $timeCallback(-2)).'.rot');
+        touch($old3 = self::$baseDir.'/Fixtures/foo-'.date($dateFormat, $timeCallback(-3)).'.rot');
+        touch($old4 = self::$baseDir.'/Fixtures/foo-'.date($dateFormat, $timeCallback(-4)).'.rot');
 
-        $log = __DIR__.'/Fixtures/foo-'.date($dateFormat).'.rot';
+        $log = self::$baseDir.'/Fixtures/foo-'.date($dateFormat).'.rot';
 
         if ($createFile) {
             touch($log);
         }
 
-        $handler = new RotatingFileHandler(__DIR__.'/Fixtures/foo.rot', 2);
+        $handler = new RotatingFileHandler(self::$baseDir.'/Fixtures/foo.rot', 2);
         $handler->setFormatter($this->getIdentityFormatter());
         $handler->setFilenameFormat('{filename}-{date}', $dateFormat);
         $handler->handle($this->getRecord());
@@ -175,18 +181,18 @@ class RotatingFileHandlerTest extends TestCase
 
     public function testRotationWithFolderByDate($createFile, $dateFormat, $timeCallback)
     {
-        $old1 = $this->createDeep(__DIR__.'/Fixtures/'.date($dateFormat, $timeCallback(-1)).'/foo.rot');
-        $old2 = $this->createDeep(__DIR__.'/Fixtures/'.date($dateFormat, $timeCallback(-2)).'/foo.rot');
-        $old3 = $this->createDeep(__DIR__.'/Fixtures/'.date($dateFormat, $timeCallback(-3)).'/foo.rot');
-        $old4 = $this->createDeep(__DIR__.'/Fixtures/'.date($dateFormat, $timeCallback(-4)).'/foo.rot');
+        $old1 = $this->createDeep(self::$baseDir.'/Fixtures/'.date($dateFormat, $timeCallback(-1)).'/foo.rot');
+        $old2 = $this->createDeep(self::$baseDir.'/Fixtures/'.date($dateFormat, $timeCallback(-2)).'/foo.rot');
+        $old3 = $this->createDeep(self::$baseDir.'/Fixtures/'.date($dateFormat, $timeCallback(-3)).'/foo.rot');
+        $old4 = $this->createDeep(self::$baseDir.'/Fixtures/'.date($dateFormat, $timeCallback(-4)).'/foo.rot');
 
-        $log = __DIR__.'/Fixtures/'.date($dateFormat).'/foo.rot';
+        $log = self::$baseDir.'/Fixtures/'.date($dateFormat).'/foo.rot';
 
         if ($createFile) {
             $this->createDeep($log);
         }
 
-        $handler = new RotatingFileHandler(__DIR__.'/Fixtures/foo.rot', 2);
+        $handler = new RotatingFileHandler(self::$baseDir.'/Fixtures/foo.rot', 2);
         $handler->setFormatter($this->getIdentityFormatter());
         $handler->setFilenameFormat('{date}/{filename}', $dateFormat);
         $handler->handle($this->getRecord());
@@ -234,7 +240,7 @@ class RotatingFileHandlerTest extends TestCase
 
     public function testAllowOnlyFixedDefinedDateFormats($dateFormat, $valid)
     {
-        $handler = new RotatingFileHandler(__DIR__.'/Fixtures/foo.rot', 2);
+        $handler = new RotatingFileHandler(self::$baseDir.'/Fixtures/foo.rot', 2);
         if (!$valid) {
             $this->expectException(InvalidArgumentException::class);
             $this->expectExceptionMessageMatches('~^Invalid date format~');
@@ -272,7 +278,7 @@ class RotatingFileHandlerTest extends TestCase
 
     public function testDisallowFilenameFormatsWithoutDate($filenameFormat, $valid)
     {
-        $handler = new RotatingFileHandler(__DIR__.'/Fixtures/foo.rot', 2);
+        $handler = new RotatingFileHandler(self::$baseDir.'/Fixtures/foo.rot', 2);
         if (!$valid) {
             $this->expectException(InvalidArgumentException::class);
             $this->expectExceptionMessageMatches('~^Invalid filename format~');
@@ -297,12 +303,12 @@ class RotatingFileHandlerTest extends TestCase
 
     public function testRotationWhenSimilarFileNamesExist($dateFormat)
     {
-        touch($old1 = __DIR__.'/Fixtures/foo-foo-'.date($dateFormat).'.rot');
-        touch($old2 = __DIR__.'/Fixtures/foo-bar-'.date($dateFormat).'.rot');
+        touch($old1 = self::$baseDir.'/Fixtures/foo-foo-'.date($dateFormat).'.rot');
+        touch($old2 = self::$baseDir.'/Fixtures/foo-bar-'.date($dateFormat).'.rot');
 
-        $log = __DIR__.'/Fixtures/foo-'.date($dateFormat).'.rot';
+        $log = self::$baseDir.'/Fixtures/foo-'.date($dateFormat).'.rot';
 
-        $handler = new RotatingFileHandler(__DIR__.'/Fixtures/foo.rot', 2);
+        $handler = new RotatingFileHandler(self::$baseDir.'/Fixtures/foo.rot', 2);
         $handler->setFormatter($this->getIdentityFormatter());
         $handler->setFilenameFormat('{filename}-{date}', $dateFormat);
         $handler->handle($this->getRecord());
@@ -327,9 +333,9 @@ class RotatingFileHandlerTest extends TestCase
 
     public function testReuseCurrentFile()
     {
-        $log = __DIR__.'/Fixtures/foo-'.date('Y-m-d').'.rot';
+        $log = self::$baseDir.'/Fixtures/foo-'.date('Y-m-d').'.rot';
         file_put_contents($log, "foo");
-        $handler = new RotatingFileHandler(__DIR__.'/Fixtures/foo.rot');
+        $handler = new RotatingFileHandler(self::$baseDir.'/Fixtures/foo.rot');
         $handler->setFormatter($this->getIdentityFormatter());
         $handler->handle($this->getRecord());
         $this->assertEquals('footest', file_get_contents($log));

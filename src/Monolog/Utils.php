@@ -227,6 +227,12 @@ final class Utils
         }
     }
 
+    // for test only
+    public static function detectAndCleanUtf8ForTest(&$data)
+    {
+        self::detectAndCleanUtf8($data);
+    }
+
     /**
      * Converts a string with a valid 'memory_limit' format, to bytes.
      *

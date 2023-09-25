@@ -69,8 +69,6 @@ Handler/SlackWebhookHandler.php
 Handler/SocketHandler.php
 Handler/StreamHandler.php
 Handler/SyslogHandler.php
-Handler/SyslogUdpHandler.php
-Handler/SyslogUdp/UdpSocket.php
 Handler/TelegramBotHandler.php
 Handler/TestHandler.php
 Handler/WhatFailureGroupHandler.php

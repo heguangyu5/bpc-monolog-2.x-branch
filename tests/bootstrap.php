@@ -11,6 +11,21 @@
 
 date_default_timezone_set('UTC');
 
+if (defined('__BPC__')) {
+
+    spl_autoload_register(function ($class) {
+        if (strpos($class, 'Monolog\\') === 0) {
+            $classPath = strtr($class, '\\', DIRECTORY_SEPARATOR) . '.php';
+            if (!include_silent($classPath)) {
+                include_silent(__DIR__ . '/' . $classPath);
+            }
+        } else if (strpos($class, 'Psr\\') === 0) {
+            include_silent(strtr($class, '\\', DIRECTORY_SEPARATOR) . '.php');
+        }
+    });
+
+} else {
+
 spl_autoload_register(function ($class) {
     if (strpos($class, 'Monolog\\') === 0) {
         $classPath = strtr($class, '\\', DIRECTORY_SEPARATOR) . '.php';
@@ -32,4 +47,6 @@ spl_autoload_register(function ($class) {
 // see https://github.com/php-fig/log/pull/52
 if (!class_exists('\\PHPUnit_Framework_TestCase', true)) {
     class_alias('\\PHPUnit\\Framework\\TestCase', '\\PHPUnit_Framework_TestCase');
+}
+
 }

@@ -133,8 +133,8 @@ class LineFormatterTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $path = str_replace('\\/', '/', json_encode(__FILE__));
-
-        $this->assertEquals('['.date('Y-m-d').'] core.CRITICAL: foobar {"exception":"[object] (RuntimeException(code: 0): Foo at '.substr($path, 1, -1).':'.(__LINE__ - 8).')"} []'."\n", $message);
+if (defined('__BPC__')) { $lineDiff = 3; } else { $lineDiff = 8; }
+        $this->assertEquals('['.date('Y-m-d').'] core.CRITICAL: foobar {"exception":"[object] (RuntimeException(code: 0): Foo at '.substr($path, 1, -1).':'.(__LINE__ - $lineDiff).')"} []'."\n", $message);
     }
 
     public function testDefFormatWithExceptionAndStacktrace()
@@ -151,8 +151,8 @@ class LineFormatterTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $path = str_replace('\\/', '/', json_encode(__FILE__));
-
-        $this->assertRegexp('{^\['.date('Y-m-d').'] core\.CRITICAL: foobar \{"exception":"\[object] \(RuntimeException\(code: 0\): Foo at '.preg_quote(substr($path, 1, -1)).':'.(__LINE__ - 8).'\)\n\[stacktrace]\n#0}', $message);
+if (defined('__BPC__')) { $lineDiff = 3; } else { $lineDiff = 8; }
+        $this->assertRegexp('{^\['.date('Y-m-d').'] core\.CRITICAL: foobar \{"exception":"\[object] \(RuntimeException\(code: 0\): Foo at '.preg_quote(substr($path, 1, -1)).':'.(__LINE__ - $lineDiff).'\)\n\[stacktrace]\n#0}', $message);
     }
 
     public function testInlineLineBreaksRespectsEscapedBackslashes()
@@ -181,16 +181,27 @@ class LineFormatterTest extends \PHPUnit_Framework_TestCase
 
         $trace = explode('[stacktrace]', $message, 2)[1];
 
-        $this->assertStringContainsString('TestCase.php', $trace);
-        $this->assertStringContainsString('TestResult.php', $trace);
+        if (defined('__BPC__')) {
+            $this->assertStringContainsString('%3aecc091c03dd219d7b9bce63f76da6f', $trace); // TestCase.php
+            $this->assertStringContainsString('%e535e702d53d4ea048131d2dfb724a6b', $trace); // TestResult.php
+        } else {
+            $this->assertStringContainsString('TestCase.php', $trace);
+            $this->assertStringContainsString('TestResult.php', $trace);
+        }
     }
 
     public function testDefFormatWithExceptionAndStacktraceParserCustom()
     {
         $formatter = new LineFormatter(null, 'Y-m-d');
         $formatter->includeStacktraces(true, function ($line) {
-            if (strpos($line, 'TestCase.php') === false) {
-                return $line;
+            if (defined('__BPC__')) {
+                if (strpos($line, '%3aecc091c03dd219d7b9bce63f76da6f') === false) { // TestCase.php
+                    return $line;
+                }
+            } else {
+                if (strpos($line, 'TestCase.php') === false) {
+                    return $line;
+                }
             }
         });
 
@@ -205,8 +216,13 @@ class LineFormatterTest extends \PHPUnit_Framework_TestCase
 
         $trace = explode('[stacktrace]', $message, 2)[1];
 
-        $this->assertStringNotContainsString('TestCase.php', $trace);
-        $this->assertStringContainsString('TestResult.php', $trace);
+        if (defined('__BPC__')) {
+            $this->assertStringNotContainsString('%3aecc091c03dd219d7b9bce63f76da6f', $trace); // TestCase.php
+            $this->assertStringContainsString('%e535e702d53d4ea048131d2dfb724a6b', $trace); // TestResult.php
+        } else {
+            $this->assertStringNotContainsString('TestCase.php', $trace);
+            $this->assertStringContainsString('TestResult.php', $trace);
+        }
     }
 
     public function testDefFormatWithExceptionAndStacktraceParserEmpty()
@@ -244,8 +260,8 @@ class LineFormatterTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $path = str_replace('\\/', '/', json_encode(__FILE__));
-
-        $this->assertEquals('['.date('Y-m-d').'] core.CRITICAL: foobar {"exception":"[object] (RuntimeException(code: 0): Foo at '.substr($path, 1, -1).':'.(__LINE__ - 8).')\n[previous exception] [object] (LogicException(code: 0): Wut? at '.substr($path, 1, -1).':'.(__LINE__ - 12).')"} []'."\n", $message);
+if (defined('__BPC__')) { $lineDiff1 = 4; $lineDiff2 = 5; } else { $lineDiff1 = 8; $lineDiff2 = 12;}
+        $this->assertEquals('['.date('Y-m-d').'] core.CRITICAL: foobar {"exception":"[object] (RuntimeException(code: 0): Foo at '.substr($path, 1, -1).':'.(__LINE__ - $lineDiff1).')\n[previous exception] [object] (LogicException(code: 0): Wut? at '.substr($path, 1, -1).':'.(__LINE__ - $lineDiff2).')"} []'."\n", $message);
     }
 /*
     public function testDefFormatWithSoapFaultException()

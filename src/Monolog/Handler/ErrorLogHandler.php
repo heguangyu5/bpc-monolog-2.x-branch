@@ -31,6 +31,8 @@ class ErrorLogHandler extends AbstractProcessingHandler
     /** @var bool */
     protected $expandNewlines;
 
+    public static $errorLogFunc = 'error_log';
+
     /**
      * @param int  $messageType    Says where the error should go.
      * @param bool $expandNewlines If set to true, newlines in the message will be expanded to be take multiple log entries
@@ -73,8 +75,10 @@ class ErrorLogHandler extends AbstractProcessingHandler
      */
     protected function write(array $record): void
     {
+        $errorLogFunc = self::$errorLogFunc;
+
         if (!$this->expandNewlines) {
-            error_log((string) $record['formatted'], $this->messageType);
+            $errorLogFunc((string) $record['formatted'], $this->messageType);
 
             return;
         }
@@ -85,7 +89,7 @@ class ErrorLogHandler extends AbstractProcessingHandler
             throw new \RuntimeException('Failed to preg_split formatted string: ' . $pcreErrorCode . ' / '. Utils::pcreLastErrorMessage($pcreErrorCode));
         }
         foreach ($lines as $line) {
-            error_log($line, $this->messageType);
+            $errorLogFunc($line, $this->messageType);
         }
     }
 }

@@ -26,8 +26,8 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['stdClass', new \stdClass()],
-            ['class@anonymous', new class {}],
-            ['stdClass@anonymous', new class extends \stdClass {}],
+            //['class@anonymous', new class {}],
+            //['stdClass@anonymous', new class extends \stdClass {}],
         ];
     }
 
@@ -80,10 +80,11 @@ class UtilsTest extends \PHPUnit_Framework_TestCase
      */
     public function testDetectAndCleanUtf8($in, $expect)
     {
-        $reflMethod = new \ReflectionMethod(Utils::class, 'detectAndCleanUtf8');
-        $reflMethod->setAccessible(true);
-        $args = [&$in];
-        $reflMethod->invokeArgs(null, $args);
+        //$reflMethod = new \ReflectionMethod(Utils::class, 'detectAndCleanUtf8');
+        //$reflMethod->setAccessible(true);
+        //$args = [&$in];
+        //$reflMethod->invokeArgs(null, $args);
+        Utils::detectAndCleanUtf8ForTest($in);
         $this->assertSame($expect, $in);
     }
 

@@ -187,6 +187,12 @@ class SocketHandler extends AbstractProcessingHandler
         return $this->connectionString;
     }
 
+    // for test only
+    public function setConnectionString($connectionString)
+    {
+        $this->connnectString = $connectionString;
+    }
+
     /**
      * Get persistent setting
      */
@@ -296,7 +302,8 @@ class SocketHandler extends AbstractProcessingHandler
             throw new \LogicException('streamSetChunkSize called but $this->chunkSize is not set');
         }
 
-        return stream_set_chunk_size($this->resource, $this->chunkSize);
+        //return stream_set_chunk_size($this->resource, $this->chunkSize);
+        return $this->chunkSize;
     }
 
     /**

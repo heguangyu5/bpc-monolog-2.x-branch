@@ -15,10 +15,9 @@ use Monolog\Test\TestCase;
 use Monolog\Logger;
 use Monolog\Formatter\LineFormatter;
 
-function error_log()
-{
+ErrorLogHandler::$errorLogFunc = function () {
     $GLOBALS['error_log'][] = func_get_args();
-}
+};
 
 class ErrorLogHandlerTest extends TestCase
 {
