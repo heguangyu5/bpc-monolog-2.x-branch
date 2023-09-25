@@ -77,7 +77,7 @@ class NormalizerFormatterTest extends \PHPUnit_Framework_TestCase
             ],
         ], $formatted);
     }
-
+/*
     public function testFormatSoapFaultException()
     {
         if (!class_exists('SoapFault')) {
@@ -124,7 +124,7 @@ class NormalizerFormatterTest extends \PHPUnit_Framework_TestCase
             ],
         ], $formatted);
     }
-
+*/
     public function testFormatToStringExceptionHandle()
     {
         $formatter = new NormalizerFormatter('Y-m-d');

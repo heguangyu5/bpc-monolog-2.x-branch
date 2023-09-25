@@ -23,7 +23,14 @@ use Monolog\Formatter\FormatterInterface;
  */
 class FirePHPHandler extends AbstractProcessingHandler
 {
-    use WebRequestRecognizerTrait;
+    /**
+     * Checks if PHP's serving a web request
+     * @return bool
+     */
+    protected function isWebRequest(): bool
+    {
+        return 'cli' !== \PHP_SAPI && 'phpdbg' !== \PHP_SAPI;
+    }
 
     /**
      * WildFire JSON header message format

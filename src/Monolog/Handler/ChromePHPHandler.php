@@ -27,7 +27,14 @@ use Monolog\Utils;
  */
 class ChromePHPHandler extends AbstractProcessingHandler
 {
-    use WebRequestRecognizerTrait;
+    /**
+     * Checks if PHP's serving a web request
+     * @return bool
+     */
+    protected function isWebRequest(): bool
+    {
+        return 'cli' !== \PHP_SAPI && 'phpdbg' !== \PHP_SAPI;
+    }
 
     /**
      * Version of the extension

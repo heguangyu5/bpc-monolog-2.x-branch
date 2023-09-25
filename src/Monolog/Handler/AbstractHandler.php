@@ -109,4 +109,9 @@ abstract class AbstractHandler extends Handler implements ResettableInterface
     public function reset()
     {
     }
+
+    public static function getNonStaticProps()
+    {
+        return array('level', 'bubble');
+    }
 }

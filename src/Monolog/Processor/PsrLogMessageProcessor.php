@@ -66,9 +66,9 @@ class PsrLogMessageProcessor implements ProcessorInterface
                 } else {
                     $replacements[$placeholder] = $val->format($this->dateFormat ?: static::SIMPLE_DATE);
                 }
-            } elseif ($val instanceof \UnitEnum) {
+            }/* elseif ($val instanceof \UnitEnum) {
                 $replacements[$placeholder] = $val instanceof \BackedEnum ? $val->value : $val->name;
-            } elseif (is_object($val)) {
+            }*/ elseif (is_object($val)) {
                 $replacements[$placeholder] = '[object '.Utils::getClass($val).']';
             } elseif (is_array($val)) {
                 $replacements[$placeholder] = 'array'.Utils::jsonEncode($val, null, true);

@@ -44,10 +44,17 @@ abstract class Handler implements HandlerInterface
         }
     }
 
+    public static function getNonStaticProps()
+    {
+        return array();
+    }
+
     public function __sleep()
     {
         $this->close();
 
+        throw new \Exception('subclass should override __sleep() and return non-static properties');
+/*
         $reflClass = new \ReflectionClass($this);
 
         $keys = [];
@@ -58,5 +65,6 @@ abstract class Handler implements HandlerInterface
         }
 
         return $keys;
+*/
     }
 }

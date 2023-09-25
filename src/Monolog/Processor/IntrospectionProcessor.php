@@ -76,12 +76,16 @@ class IntrospectionProcessor implements ProcessorInterface
 
         while ($this->isTraceClassOrSkippedFunction($trace, $i)) {
             if (isset($trace[$i]['class'])) {
+                $continue = false;
                 foreach ($this->skipClassesPartials as $part) {
                     if (strpos($trace[$i]['class'], $part) !== false) {
                         $i++;
-
-                        continue 2;
+                        $continue = true;
+                        break;
                     }
+                }
+                if ($continue) {
+                    continue;
                 }
             } elseif (in_array($trace[$i]['function'], $this->skipFunctions)) {
                 $i++;

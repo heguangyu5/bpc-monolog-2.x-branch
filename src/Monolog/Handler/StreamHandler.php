@@ -135,14 +135,14 @@ class StreamHandler extends AbstractProcessingHandler
             $this->createDir($url);
             $this->errorMessage = null;
             set_error_handler([$this, 'customErrorHandler']);
-            try {
+            //try {
                 $stream = fopen($url, 'a');
                 if ($this->filePermission !== null) {
                     @chmod($url, $this->filePermission);
                 }
-            } finally {
+            //} finally {
                 restore_error_handler();
-            }
+            //}
             if (!is_resource($stream)) {
                 $this->stream = null;
 
@@ -220,5 +220,28 @@ class StreamHandler extends AbstractProcessingHandler
             }
         }
         $this->dirCreated = true;
+    }
+
+    public static function getNonStaticProps()
+    {
+        return array_merge(
+            parent::getNonStaticProps(),
+            array(
+                'streamChunkSize',
+                'stream',
+                'url',
+                'errorMessage',
+                'filePermission',
+                'useLocking',
+                'dirCreated'
+            )
+        );
+    }
+
+    public function __sleep()
+    {
+        $this->close();
+
+        return self::getNonStaticProps();
     }
 }

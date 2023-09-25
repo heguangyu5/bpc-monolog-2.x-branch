@@ -212,7 +212,7 @@ class NormalizerFormatter implements FormatterInterface
             'code' => (int) $e->getCode(),
             'file' => $e->getFile().':'.$e->getLine(),
         ];
-
+/*
         if ($e instanceof \SoapFault) {
             if (isset($e->faultcode)) {
                 $data['faultcode'] = $e->faultcode;
@@ -230,7 +230,7 @@ class NormalizerFormatter implements FormatterInterface
                 }
             }
         }
-
+*/
         $trace = $e->getTrace();
         foreach ($trace as $frame) {
             if (isset($frame['file'])) {

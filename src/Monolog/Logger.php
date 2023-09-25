@@ -195,12 +195,12 @@ class Logger implements LoggerInterface, ResettableInterface
         $this->processors = $processors;
         $this->timezone = $timezone ?: new DateTimeZone(date_default_timezone_get() ?: 'UTC');
 
-        if (\PHP_VERSION_ID >= 80100) {
-            // Local variable for phpstan, see https://github.com/phpstan/phpstan/issues/6732#issuecomment-1111118412
-            /** @var \WeakMap<\Fiber, int> $fiberLogDepth */
-            $fiberLogDepth = new \WeakMap();
-            $this->fiberLogDepth = $fiberLogDepth;
-        }
+//        if (\PHP_VERSION_ID >= 80100) {
+//            // Local variable for phpstan, see https://github.com/phpstan/phpstan/issues/6732#issuecomment-1111118412
+//            /** @var \WeakMap<\Fiber, int> $fiberLogDepth */
+//            $fiberLogDepth = new \WeakMap();
+//            $this->fiberLogDepth = $fiberLogDepth;
+//        }
     }
 
     public function getName(): string
@@ -344,12 +344,12 @@ class Logger implements LoggerInterface, ResettableInterface
         }
 
         if ($this->detectCycles) {
-            if (\PHP_VERSION_ID >= 80100 && $fiber = \Fiber::getCurrent()) {
-                $this->fiberLogDepth[$fiber] = $this->fiberLogDepth[$fiber] ?? 0;
-                $logDepth = ++$this->fiberLogDepth[$fiber];
-            } else {
+//            if (\PHP_VERSION_ID >= 80100 && $fiber = \Fiber::getCurrent()) {
+//                $this->fiberLogDepth[$fiber] = $this->fiberLogDepth[$fiber] ?? 0;
+//                $logDepth = ++$this->fiberLogDepth[$fiber];
+//            } else {
                 $logDepth = ++$this->logDepth;
-            }
+//            }
         } else {
             $logDepth = 0;
         }
@@ -361,7 +361,7 @@ class Logger implements LoggerInterface, ResettableInterface
             return false;
         }
 
-        try {
+        //try {
             $record = null;
 
             foreach ($this->handlers as $handler) {
@@ -389,7 +389,9 @@ class Logger implements LoggerInterface, ResettableInterface
                         }
                     } catch (Throwable $e) {
                         $this->handleException($e, $record);
-
+                        if ($this->detectCycles) {
+                            $this->logDepth--;
+                        }
                         return true;
                     }
                 }
@@ -401,11 +403,13 @@ class Logger implements LoggerInterface, ResettableInterface
                     }
                 } catch (Throwable $e) {
                     $this->handleException($e, $record);
-
+                    if ($this->detectCycles) {
+                        $this->logDepth--;
+                    }
                     return true;
                 }
             }
-        } finally {
+        /*} finally {
             if ($this->detectCycles) {
                 if (isset($fiber)) {
                     $this->fiberLogDepth[$fiber]--;
@@ -413,6 +417,10 @@ class Logger implements LoggerInterface, ResettableInterface
                     $this->logDepth--;
                 }
             }
+        }*/
+
+        if ($this->detectCycles) {
+            $this->logDepth--;
         }
 
         return null !== $record;
@@ -751,11 +759,11 @@ class Logger implements LoggerInterface, ResettableInterface
             }
         }
 
-        if (\PHP_VERSION_ID >= 80100) {
-            // Local variable for phpstan, see https://github.com/phpstan/phpstan/issues/6732#issuecomment-1111118412
-            /** @var \WeakMap<\Fiber, int> $fiberLogDepth */
-            $fiberLogDepth = new \WeakMap();
-            $this->fiberLogDepth = $fiberLogDepth;
-        }
+//        if (\PHP_VERSION_ID >= 80100) {
+//            // Local variable for phpstan, see https://github.com/phpstan/phpstan/issues/6732#issuecomment-1111118412
+//            /** @var \WeakMap<\Fiber, int> $fiberLogDepth */
+//            $fiberLogDepth = new \WeakMap();
+//            $this->fiberLogDepth = $fiberLogDepth;
+//        }
     }
 }

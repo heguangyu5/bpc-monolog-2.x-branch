@@ -112,7 +112,7 @@ class ErrorHandler
      */
     public function registerErrorHandler(array $levelMap = [], bool $callPrevious = true, int $errorTypes = -1, bool $handleOnlyReportedErrors = true): self
     {
-        $prev = set_error_handler([$this, 'handleError'], $errorTypes);
+        $prev = set_error_handler([$this, 'handleError']/*, $errorTypes*/);
         $this->errorLevelMap = array_replace($this->defaultErrorLevelMap(), $levelMap);
         if ($callPrevious) {
             $this->previousErrorHandler = $prev ?: true;

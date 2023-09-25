@@ -202,7 +202,7 @@ class LineFormatter extends NormalizerFormatter
     private function formatException(\Throwable $e): string
     {
         $str = '[object] (' . Utils::getClass($e) . '(code: ' . $e->getCode();
-        if ($e instanceof \SoapFault) {
+        /*if ($e instanceof \SoapFault) {
             if (isset($e->faultcode)) {
                 $str .= ' faultcode: ' . $e->faultcode;
             }
@@ -218,7 +218,7 @@ class LineFormatter extends NormalizerFormatter
                     $str .= ' detail: ' . $this->toJson($e->detail, true);
                 }
             }
-        }
+        }*/
         $str .= '): ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine() . ')';
 
         if ($this->includeStacktraces) {

@@ -57,4 +57,16 @@ class NullHandler extends Handler
     {
         return $record['level'] >= $this->level;
     }
+
+    public static function getNonStaticProps()
+    {
+        return array('level');
+    }
+
+    public function __sleep()
+    {
+        $this->close();
+
+        return self::getNonStaticProps();
+    }
 }
