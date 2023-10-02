@@ -1,3 +1,20 @@
+# BPC Notes 1: How to make?
+
+```shell
+cd src/Monolog/
+make && sudo make install-libmonolog
+sudo ldconfig
+```
+
+# BPC Notes 2: How to run tests?
+
+```shell
+cd tests/
+phpunit-bpc --bootstrap=bootstrap.php --bpc=. .
+make
+./test --bootstrap=bootstrap.php
+```
+
 # Monolog - Logging for PHP [![Continuous Integration](https://github.com/Seldaek/monolog/workflows/Continuous%20Integration/badge.svg?branch=main)](https://github.com/Seldaek/monolog/actions)
 
 [![Total Downloads](https://img.shields.io/packagist/dt/monolog/monolog.svg)](https://packagist.org/packages/monolog/monolog)
